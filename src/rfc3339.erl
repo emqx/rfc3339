@@ -47,11 +47,11 @@ parse_to_local_datetime(Bin) ->
     UTCDateTime = calendar:gregorian_seconds_to_datetime(TZSecs + (60*TZ)),
     calendar:universal_time_to_local_time(UTCDateTime).
 
--spec parse(binary()) -> {ok, timestamp()} | {error, error()}.
+-spec parse(_String) -> {ok, timestamp()} | {error, error()}.
 parse(Bin) when is_binary(Bin) -> date(Bin, {undefined, undefined, undefined, undefined});
 parse(_) -> {error, badarg}.
 
--spec to_map(binary()) -> {ok, timestamp_map()} | {error, error()}.
+-spec to_map(_String) -> timestamp_map() | {error, error()}.
 to_map(Bin) when is_binary(Bin) ->
   case parse(Bin) of
     {ok, {Date, Time, USec, Tz}} -> mapify(Date, Time, USec, Tz, #{});
@@ -59,11 +59,11 @@ to_map(Bin) when is_binary(Bin) ->
   end;
 to_map(_) -> {error, badarg}.
 
--spec to_time(binary()) -> {ok, integer()} | {error, error()}.
-to_time(Bin) when is_binary(Bin) -> to_time(Bin, native).
+-spec to_time(_Source) -> {ok, integer()} | {error, error()}.
+to_time(Bin) -> to_time(Bin, native).
 
--spec to_time(binary(), erlang:time_unit()) -> {ok, integer()} | {error, error()}.
-to_time(Bin, Unit) when is_binary(Bin) ->
+-spec to_time(_Source, erlang:time_unit()) -> {ok, integer()} | {error, error()}.
+to_time(Bin, Unit) ->
   case parse(Bin) of
     {ok, {Date, {Hour, Min, Sec}, USec, Tz}} ->
       Epoch = calendar:datetime_to_gregorian_seconds({{1970, 1, 1}, {0, 0, 0}}),
